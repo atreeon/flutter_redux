@@ -5,8 +5,7 @@ import 'package:redux/redux.dart';
 
 void main() {
   group('StoreProvider', () {
-    testWidgets('passes a Redux Store down to its descendants',
-        (WidgetTester tester) async {
+    testWidgets('passes a Redux Store down to its descendants', (WidgetTester tester) async {
       final store = Store<String>(
         identityReducer,
         initialState: 'I',
@@ -18,14 +17,12 @@ void main() {
 
       await tester.pumpWidget(widget);
 
-      final captor =
-          tester.firstWidget<StoreCaptor>(find.byKey(StoreCaptor.captorKey));
+      final captor = tester.firstWidget<StoreCaptor>(find.byKey(StoreCaptor.captorKey));
 
       expect(captor.store, store);
     });
 
-    testWidgets('throws a helpful message if no provider found',
-        (WidgetTester tester) async {
+    testWidgets('throws a helpful message if no provider found', (WidgetTester tester) async {
       final store = Store<String>(
         identityReducer,
         initialState: 'I',
@@ -40,8 +37,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<StoreProviderError>());
     });
 
-    testWidgets('should update the children if the store changes',
-        (WidgetTester tester) async {
+    testWidgets('should update the children if the store changes', (WidgetTester tester) async {
       Widget widget(String state) {
         return StoreProvider<String>(
           store: Store<String>(
@@ -55,16 +51,14 @@ void main() {
       await tester.pumpWidget(widget('I'));
       await tester.pumpWidget(widget('A'));
 
-      final captor =
-          tester.firstWidget<StoreCaptor>(find.byKey(StoreCaptor.captorKey));
+      final captor = tester.firstWidget<StoreCaptor>(find.byKey(StoreCaptor.captorKey));
 
       expect(captor.store.state, 'A');
     });
   });
 
   group('StoreConnector', () {
-    testWidgets('initially builds from the current state of the store',
-        (WidgetTester tester) async {
+    testWidgets('initially builds from the current state of the store', (WidgetTester tester) async {
       final widget = StoreProvider<String>(
         store: Store<String>(identityReducer, initialState: 'I'),
         child: StoreBuilder<String>(
@@ -82,8 +76,7 @@ void main() {
       expect(find.text('I'), findsOneWidget);
     });
 
-    testWidgets('can convert the store to a ViewModel',
-        (WidgetTester tester) async {
+    testWidgets('can convert the store to a ViewModel', (WidgetTester tester) async {
       final widget = StoreProvider<String>(
         store: Store<String>(identityReducer, initialState: 'I'),
         child: StoreConnector<String, String>(
@@ -102,8 +95,7 @@ void main() {
       expect(find.text('I'), findsOneWidget);
     });
 
-    testWidgets('converter errors in initState are thrown by the Widget',
-        (WidgetTester tester) async {
+    testWidgets('converter errors in initState are thrown by the Widget', (WidgetTester tester) async {
       final widget = StoreProvider<String>(
         store: Store<String>(identityReducer, initialState: 'I'),
         child: StoreConnector<String, String>(
@@ -122,8 +114,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<ConverterError>());
     });
 
-    testWidgets('converter errors from the stream are thrown by the Widget',
-        (WidgetTester tester) async {
+    testWidgets('converter errors from the stream are thrown by the Widget', (WidgetTester tester) async {
       int count = 0;
       final store = Store<String>(identityReducer, initialState: 'I');
       final widget = StoreProvider<String>(
@@ -155,8 +146,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<ConverterError>());
     });
 
-    testWidgets('builds the latest state of the store after a change event',
-        (WidgetTester tester) async {
+    testWidgets('builds the latest state of the store after a change event', (WidgetTester tester) async {
       final store = Store<String>(
         identityReducer,
         initialState: 'I',
@@ -185,8 +175,7 @@ void main() {
       expect(find.text('A'), findsOneWidget);
     });
 
-    testWidgets('rebuilds by default whenever the store emits a change',
-        (WidgetTester tester) async {
+    testWidgets('rebuilds by default whenever the store emits a change', (WidgetTester tester) async {
       var numBuilds = 0;
       final store = Store<String>(
         identityReducer,
@@ -234,8 +223,7 @@ void main() {
       expect(StoreCaptorStateful.captorKey.currentState.store, store);
     });
 
-    testWidgets('does not rebuild if rebuildOnChange is set to false',
-        (WidgetTester tester) async {
+    testWidgets('does not rebuild if rebuildOnChange is set to false', (WidgetTester tester) async {
       var numBuilds = 0;
       final store = Store<String>(
         identityReducer,
@@ -271,8 +259,7 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('does not rebuild if ignoreChange returns true',
-        (WidgetTester tester) async {
+    testWidgets('does not rebuild if ignoreChange returns true', (WidgetTester tester) async {
       var numBuilds = 0;
       final store = Store<String>(
         identityReducer,
@@ -306,8 +293,7 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('runs a function when initialized',
-        (WidgetTester tester) async {
+    testWidgets('runs a function when initialized', (WidgetTester tester) async {
       var numBuilds = 0;
       final counter = CallCounter<Store<String>>();
       final store = Store<String>(
@@ -357,8 +343,7 @@ void main() {
       expect(counter.callCount, 1);
     });
 
-    testWidgets('onInit is called before the first ViewModel is built',
-        (WidgetTester tester) async {
+    testWidgets('onInit is called before the first ViewModel is built', (WidgetTester tester) async {
       String currentState;
       final store = Store<String>(
         identityReducer,
@@ -413,8 +398,7 @@ void main() {
       expect(states, [BuildState.during, BuildState.before, BuildState.during]);
     });
 
-    testWidgets('runs a function after initial build',
-        (WidgetTester tester) async {
+    testWidgets('runs a function after initial build', (WidgetTester tester) async {
       final states = <BuildState>[];
       final store = Store<String>(identityReducer, initialState: 'A');
 
@@ -439,8 +423,7 @@ void main() {
       expect(states, [BuildState.during, BuildState.after]);
     });
 
-    testWidgets('runs a function after build when the vm changes',
-        (WidgetTester tester) async {
+    testWidgets('runs a function after build when the vm changes', (WidgetTester tester) async {
       final states = <BuildState>[];
       final store = Store<String>(identityReducer, initialState: 'A');
 
@@ -506,9 +489,7 @@ void main() {
       expect(counter.callCount, 1);
     });
 
-    testWidgets(
-        'avoids rebuilds when distinct is used with a class that implements ==',
-        (WidgetTester tester) async {
+    testWidgets('avoids rebuilds when distinct is used with a class that implements ==', (WidgetTester tester) async {
       var numBuilds = 0;
       final store = Store<String>(
         identityReducer,
@@ -678,8 +659,7 @@ void main() {
   });
 
   group('StoreBuilder', () {
-    testWidgets('runs a function when initialized',
-        (WidgetTester tester) async {
+    testWidgets('runs a function when initialized', (WidgetTester tester) async {
       var numBuilds = 0;
       final counter = CallCounter<Store<String>>();
       final store = Store<String>(
@@ -752,8 +732,7 @@ void main() {
       expect(counter.callCount, 1);
     });
 
-    testWidgets('runs a function after initial build',
-        (WidgetTester tester) async {
+    testWidgets('runs a function after initial build', (WidgetTester tester) async {
       final states = <BuildState>[];
       final store = Store<String>(identityReducer, initialState: 'A');
 
@@ -777,8 +756,7 @@ void main() {
       expect(states, [BuildState.during, BuildState.after]);
     });
 
-    testWidgets('runs a function after build when the vm changes',
-        (WidgetTester tester) async {
+    testWidgets('runs a function after build when the vm changes', (WidgetTester tester) async {
       final states = <BuildState>[];
       final store = Store<String>(identityReducer, initialState: 'A');
 
@@ -863,8 +841,7 @@ class StoreCaptor<S> extends StatelessWidget {
 }
 
 class StoreCaptorStateful extends StatefulWidget {
-  static GlobalKey<_StoreCaptorStatefulState> captorKey =
-      GlobalKey<_StoreCaptorStatefulState>();
+  static GlobalKey<_StoreCaptorStatefulState> captorKey = GlobalKey<_StoreCaptorStatefulState>();
 
   StoreCaptorStateful() : super(key: captorKey);
 
