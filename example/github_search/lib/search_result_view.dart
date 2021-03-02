@@ -24,7 +24,7 @@ class SearchPopulatedView extends StatelessWidget {
       MaterialPageRoute<Null>(
         builder: (BuildContext context) {
           return Scaffold(
-            resizeToAvoidBottomPadding: false,
+            resizeToAvoidBottomInset: false,
             body: GestureDetector(
               key: Key(item.avatarUrl),
               onTap: () => Navigator.pop(context),
@@ -51,7 +51,7 @@ class SearchPopulatedView extends StatelessWidget {
 class _SearchItem extends StatelessWidget {
   const _SearchItem({
     Key key,
-    @required this.item,
+    required this.item,
   }) : super(key: key);
 
   final SearchResultItem item;
